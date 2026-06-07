@@ -1,0 +1,49 @@
+{
+  "name": "create-core-cli",
+  "version": "0.0.1",
+  "description": "Scaffold a new core-cli project. npm create core-cli my-tool.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Martin Weiser <martin.weiser@gmail.com>",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "create-core-cli": "./dist/cli.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgar0011/create-core-cli.git"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "start": "node ./dist/cli.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "citty": "^0.1.6",
+    "giget": "^2.0.0",
+    "picocolors": "^1.1.1",
+    "tinyexec": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "oxlint": "^1.67.0",
+    "prettier": "^3.8.0",
+    "tsdown": "^0.22.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.8"
+  }
+}

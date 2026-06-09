@@ -11,11 +11,16 @@ describe('create-core-cli command', () => {
   })
 
   it('declares folder as optional positional', () => {
-    expect(command.args?.folder).toMatchObject({ type: 'positional', required: false })
+    const args = command.args as { folder?: { type: string; required: boolean } }
+    expect(args?.folder).toMatchObject({ type: 'positional', required: false })
   })
 
   it('declares installer / install / git flags', () => {
-    const args = command.args ?? {}
+    const args = command.args as {
+      installer?: { type: string }
+      install?: { type: string; default: boolean }
+      git?: { type: string; default: boolean }
+    }
     expect(args.installer).toMatchObject({ type: 'string' })
     expect(args.install).toMatchObject({ type: 'boolean', default: true })
     expect(args.git).toMatchObject({ type: 'boolean', default: true })

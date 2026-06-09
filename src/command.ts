@@ -6,6 +6,8 @@ import { downloadTemplate } from 'giget'
 import pc from 'picocolors'
 import { x } from 'tinyexec'
 
+import pkg from '../package.json' with { type: 'json' }
+
 const REPO = process.env.CREATE_CORE_CLI_TEMPLATE_REPO ?? 'github:edgar0011/create-core-cli'
 
 const INSTALLERS = ['npm', 'pnpm', 'yarn', 'bun'] as const
@@ -23,10 +25,9 @@ const isInstaller = (v: string | undefined): v is Installer =>
 
 export const command = defineCommand({
   meta: {
-    name: 'create-core-cli',
-    version: '0.0.1',
-    description:
-      'Scaffold a new npx-style create-* package by cloning create-core-cli into a folder you can rename and customize.',
+    name: pkg.name,
+    version: pkg.version,
+    description: pkg.description,
   },
   args: {
     folder: {
@@ -92,18 +93,18 @@ export const command = defineCommand({
 
     const pkgPath = `${folder}/package.json`
     const raw = await readFile(pkgPath, 'utf8')
-    const pkg = JSON.parse(raw) as {
+    const manifest = JSON.parse(raw) as {
       name?: string
       version?: string
       bin?: Record<string, string>
       description?: string
       repository?: unknown
     }
-    pkg.name = folder
-    pkg.version = '0.0.1'
-    pkg.bin = { [folder]: './dist/cli.mjs' }
-    delete pkg.repository
-    await writeFile(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, 'utf8')
+    manifest.name = folder
+    manifest.version = '0.0.1'
+    manifest.bin = { [folder]: './dist/cli.mjs' }
+    delete manifest.repository
+    await writeFile(pkgPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8')
 
     if (args.git) {
       try {
